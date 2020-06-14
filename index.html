@@ -28,7 +28,7 @@
                 if (i < txt.length - "Gordon".length) {
                     document.getElementById("header-intro-text-body").innerHTML += txt.charAt(i);
                     i++;
-                    setTimeout(typeWriter2, speed / 4);
+                    setTimeout(typeWriter2, speed / 8);
                 }
                 else {
                     typeWriter3();
@@ -98,7 +98,7 @@
                     <h1 class=project-title>Steganography</h1> <br/>
                     <div class=project-description>
                         Before taking a course where I was going to use C, I figured that I would get some experience managing memory and doing other C-like things in C.
-                        Inspired by <a href="https://www.youtube.com/watch?v=TWEXCYQKyDc&t=290s">this</a> Computerphile video, I made a command line application that can encode and read hidden messages in images.
+                        Inspired by <a style="color:black;font-size:inherit;" href="https://www.youtube.com/watch?v=TWEXCYQKyDc&t=290s">this</a> Computerphile video, I made a command line application that can encode and read hidden messages in images.
                         It works by hiding the messages in the two least significant bits of each byte in the image file.
                     </div>
                 </div>
