@@ -1,148 +1,24 @@
 <html>
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" type="text/css" href="style.css"/>
+        <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         <title> Gordon Kamer </title>
+        <script type=text/javascript>
+            var i = 0;
+            var txt = 'Lorem ipsum typing effect!'; /* The text */
+            var speed = 50; /* The speed/duration of the effect in milliseconds */
+
+            function typeWriter() {
+                if (i < txt.length) {
+                    document.getElementById("ha").innerHTML += txt.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                }
+            }
+        </script>
         <style>
-            html{
-                scroll-behavior: smooth;
-            }
-            body{
-                text-align: center;
-                font-family: Georgia;
-                margin: 0px;
-                background-color: #222222;
-            }
-            a {
-                color: black;
-            }
-            #container{
-                display: inline-block;
-                text-align: left;
-                width:50%;
-                min-width: 600px;
-                background-color: white;
-
-                /*border-left-color: #A51C30;
-                border-left-width: 1px;
-                border-left-style: solid;
-
-                border-right-color: #A51C30;
-                border-right-width: 1px;
-                border-right-style: solid;*/
-            }
-            #top-bar{
-                width: 100%;
-                background-color: #A51C30;
-                color: white;
-                font-family: Arial;
-            }
-            #top-bar a img{
-                height: 20px;
-            }
-            #header{
-                padding: 20px;
-            }
-            #header-intro{
-                display: inline-block;
-                margin: 0px;
-                padding: 10px;
-                width: calc(60% - 30px);
-                vertical-align: top;
-            }
-            #header img{
-                width: 40%;
-                border-radius: 4px;
-            }
-            #nav{
-                padding: 10px;
-                background-color:#f0f0f0;
-            }
-            .nav-choice{
-                display: inline-block;
-                border: 1px black solid;
-                border-radius: 10px;
-                padding: 5px;
-                font-size: 12px;
-                cursor: hand;
-                transition: background-color .3s;
-                margin: 5px;
-            }
-            .nav-choice:hover{
-                background-color: #A51C30; /* Harvard Crimson */ 
-                color: white;
-                border-color: #A51C30;
-            }
-            .project {
-                padding: 20px;
-            }
-            .project-img {
-                width: calc(100% - 50px);
-                margin: 25px;
-                margin-bottom: 5px;
-            }
-            .project-text {
-                vertical-align: top;
-            }
-            .project h1 {
-                margin: 5px;
-                margin-left: 0px;
-                font-size: 20px;
-            }
-            .project-description {
-                font-size: 16px;
-                line-height: 1.7em;
-            }
-            .project a img{
-                width: 50px;
-                margin-top: 15px;
-                margin-bottom: 15px;
-                float: right;
-            }
-            #mobile-prof {
-                display: none;
-            }
-            .break {
-                background-color: #222222;
-                height: 20px;
-            }
-            @media only screen and (max-width: 600px) {
-                #container {
-                    width: 100%;
-                    min-width: 50px;
-                }
-                #top-bar {
-                    background-color: #222222;
-                    height: 44px;
-                }
-                #mobile-prof {
-                    display: inline-block;
-                    height: 30px;
-                    border-radius: 5px;
-                    margin: 7px;
-                    margin-left: 20px;
-                }
-                #top-bar a img {
-                    height: 30px;
-                    margin: 7px;
-                }
-                #header {
-                    text-align: center;
-                    padding: 15px;
-                }
-                #header img {
-                    display: none;
-                }
-                #header-intro{
-                    text-align: left;
-                    padding-top: 0px;
-                    padding-left: 0px;
-                    width: calc(100% - 20px)
-                }
-                .break {
-                    background-color: #A51C30;
-                    height: 3px;
-                }
-            }
+            
         </style>
     </head>
     <body>
