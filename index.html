@@ -13,6 +13,7 @@
                         Gordon`; /* The text */
             var speed = 80; /* The speed/duration of the effect in milliseconds */
 
+            var ps = "Email: gkamer@college.harvard.edu"
             function typeWriter() {
                 if (i < "Hello,".length) {
                     document.getElementById("header-intro-text-hello").innerHTML += txt.charAt(i);
@@ -41,6 +42,9 @@
                     i++;
                     setTimeout(typeWriter3, speed);
                 }
+                else if (i == txt.length) {
+                    document.getElementById("header-intro-text-ps").innerHTML = ps;
+                }
             }
         </script>
     </head>
@@ -61,7 +65,8 @@
                         <div id=header-intro-text-container>
                             <span id="header-intro-text-hello"></span><br/><br/>
                             <span id="header-intro-text-body"></span><br/><br/>
-                            <span id="header-intro-text-signoff"></span>
+                            <span id="header-intro-text-signoff"></span><br/><br/>
+                            <span id="header-intro-text-ps"></span>
                         </div>
                     </div>
                     <img src="pics/gordon_logo.png">
