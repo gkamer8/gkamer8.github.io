@@ -126,15 +126,12 @@ a {
     line-height: 1.7em;
 }
 .project a {
-    font-size: 12px;
+    font-size: 10px;
     padding-bottom: 20px;
-    float: right;
 }
 .project a img{
     width: 50px;
     margin-top: 15px;
-    margin-bottom: 15px;
-    float: right;
 }
 #mobile-prof {
     display: none;
