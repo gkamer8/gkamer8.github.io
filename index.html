@@ -13,7 +13,7 @@
                 display: inline-block;
                 text-align: left;
                 width:50%;
-                min-width: 400px;
+                min-width: 600px;
                 background-color: white;
 
                 /*border-left-color: #A51C30;
@@ -55,6 +55,22 @@
                 background-color: #A51C30; /* Harvard Crimson */ 
                 color: white;
                 border-color: #A51C30;
+            }
+            @media only screen and (max-width: 600px) {
+                #container {
+                    width: 100%;
+                    min-width: 50px;
+                }
+                #header {
+                    text-align: center;
+                }
+                #header img{
+                    display: inline-block;
+                }
+                #header-intro{
+                    text-align: left;
+                    padding-top: 0px;
+                }
             }
         </style>
     </head>
