@@ -1,8 +1,80 @@
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title> Gordon Kamer </title>
+        <style>
+            body{
+                text-align: center;
+                font-family: Georgia;
+                margin: 0px;
+            }
+            #container{
+                display: inline-block;
+                text-align: left;
+                width:50%;
+                min-width: 400px;
+
+                border-left-color: black;
+                border-left-width: 1px;
+                border-left-style: solid;
+
+                border-right-color: black;
+                border-right-width: 1px;
+                border-right-style: solid;
+            }
+            #header{
+                padding: 20px;
+            }
+            #header-intro{
+                display: inline-block;
+                margin: 0px;
+                padding: 10px;
+                width: calc(50% - 30px);
+                vertical-align: top;
+            }
+            #header img{
+                width: 50%;
+            }
+            #nav{
+                padding: 10px;
+                background-color:#f0f0f0;
+            }
+            .nav-choice{
+                display: inline-block;
+                border: 1px black solid;
+                border-radius: 10px;
+                padding: 5px;
+                font-size: 12px;
+                cursor: hand;
+                transition: background-color .3s;
+                margin: 5px;
+            }
+            .nav-choice:hover{
+                background-color: #A51C30; /* Harvard Crimson */ 
+                color: white;
+                border-color: #A51C30;
+            }
+        </style>
     </head>
     <body>
-        Hello.
+        <div id=container>
+            <div id=header>
+                <img src="profile.jpg"/>
+                <div id=header-intro>
+                    Hello, <br/> <br/>
+                    My name is Gordon Kamer, and I'm in Harvard College's class of 2022.
+                    I like computers, and I've programmed them since around 5th grade.
+                    I made this website to show off some of my work. <br/> <br/>
+                    Best, <br/>
+                    Gordon
+                </div>
+            </div>
+            <div id=nav>
+                <div class=nav-choice>Enemy Inbound | Java | game</div>
+                <div class=nav-choice>Steganography | C | CLI app</div>
+                <div class=nav-choice>FEC 2020 | Python | web scraping</div>
+                <div class=nav-choice>JAMA Analysis | R | statistics</div>
+            </div>
+        </div>
     </body>
 </html>
