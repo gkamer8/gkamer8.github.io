@@ -87,12 +87,12 @@ a {
 #nav{
     padding: 10px;
     background-color: black;
-    text-align: center;
+    text-align: left;
     color: white;
 }
 .nav-choice{
     display: inline-block;
-    border: 1px black solid;
+    border: 1px #808080 solid;
     border-radius: 10px;
     padding: 5px;
     font-size: 12px;
