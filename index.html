@@ -92,10 +92,26 @@
                 margin-bottom: 15px;
                 float: right;
             }
+            #mobile-prof {
+                display: none;
+            }
             @media only screen and (max-width: 600px) {
                 #container {
                     width: 100%;
                     min-width: 50px;
+                }
+                #top-bar {
+                    background-color: #222222;
+                }
+                #mobile-prof {
+                    display: inline-block;
+                    height: 30px;
+                    border-radius: 5px;
+                    margin: 10px;
+                }
+                #top-bar a img {
+                    height: 30px;
+                    margin: 10px;
                 }
                 #header {
                     text-align: center;
@@ -114,6 +130,7 @@
     <body>
         <div id=container>
             <div id=top-bar>
+                <img id=mobile-prof src="profile.jpg"/>
                 <a href=https://github.com/gkamer8><img src="pics/GitHub_Logo_White.png"/></a>
             </div>
             <div id=header>
@@ -146,5 +163,6 @@
                 <a href="https://github.com/gkamer8/EnemyInbound"><img src="pics/GitHub_Logo.png"/></span></a>
             </div>
         </div>
+        <div style="height: 200px"></div> 
     </body>
 </html>
