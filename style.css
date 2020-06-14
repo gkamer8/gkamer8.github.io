@@ -6,7 +6,7 @@ body{
     /*font-family: "Lucida Console", Monaco, monospace;*/
     font-family: Georgia;
     margin: 0px;
-    background-color: #222222;
+    /*background-color: #222222;*/
 }
 a {
     color: black;
@@ -14,7 +14,7 @@ a {
 #container{
     display: inline-block;
     text-align: left;
-    width:50%;
+    width:70%;
     min-width: 600px;
     background-color: white;
 
@@ -27,6 +27,7 @@ a {
     border-right-style: solid;*/
 }
 #top-bar{
+    display: none;
     width: 100%;
     background-color: #A51C30;
     color: white;
@@ -109,6 +110,7 @@ a {
     #top-bar {
         background-color: #222222;
         height: 44px;
+        display: block;
     }
     #mobile-prof {
         display: inline-block;
