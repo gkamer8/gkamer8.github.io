@@ -4,22 +4,67 @@
         <link rel="stylesheet" type="text/css" href="style.css"/>
         <link rel="shortcut icon" type="image/x-icon" href="favicon.ico">
         <title> Gordon Kamer </title>
+        <script type="text/javascript">
+            var i = 0;
+            var txt = `Hello,
+                        My name is Gordon Kamer, and I'm in Harvard College's class of 2022.
+                        I like computers, and I've programmed them since around 5th grade.
+                        I made this website to show off some of my work.
+                        Gordon`; /* The text */
+            var speed = 80; /* The speed/duration of the effect in milliseconds */
+
+            function typeWriter() {
+                if (i < "Hello,".length) {
+                    document.getElementById("header-intro-text-hello").innerHTML += txt.charAt(i);
+                    i++;
+                    setTimeout(typeWriter, speed);
+                }
+                else{
+                    typeWriter2();
+                }
+            }
+
+            function typeWriter2() {
+                if (i < txt.length - "Gordon".length) {
+                    document.getElementById("header-intro-text-body").innerHTML += txt.charAt(i);
+                    i++;
+                    setTimeout(typeWriter2, speed / 4);
+                }
+                else {
+                    typeWriter3();
+                }
+            }
+
+            function typeWriter3() {
+                if (i < txt.length) {
+                    document.getElementById("header-intro-text-signoff").innerHTML += txt.charAt(i);
+                    i++;
+                    setTimeout(typeWriter3, speed);
+                }
+            }
+        </script>
     </head>
-    <body>
+    <body onload="typeWriter()">
         <div id=container>
             <div id=top-bar>
                 <img id=mobile-prof src="profile.jpg"/>
+                <img src="pics/gordon_logo.png">
                 <a href=https://github.com/gkamer8><img src="pics/GitHub_Logo_White.png"/></a>
             </div>
             <div id=header>
-                <img src="profile.jpg"/>
+                <div id=header-topping>
+                    <b>Gordon Kamer</b> <br/>
+                    gkamer@college.harvard.edu
+                </div>
                 <div id=header-intro>
-                    Hello, <br/> <br/>
-                    My name is Gordon Kamer, and I'm in Harvard College's class of 2022.
-                    I like computers, and I've programmed them since around 5th grade.
-                    I made this website to show off some of my work. <br/> <br/>
-                    Best, <br/>
-                    Gordon
+                    <div id=header-intro-text>
+                        <div id=header-intro-text-container>
+                            <span id="header-intro-text-hello"></span><br/><br/>
+                            <span id="header-intro-text-body"></span><br/><br/>
+                            <span id="header-intro-text-signoff"></span>
+                        </div>
+                    </div>
+                    <img src="pics/gordon_logo.png">
                 </div>
             </div>
             <div id=nav>
@@ -45,7 +90,7 @@
                 <img class=project-img src="pics/enemyinbound.png" style="border: 1px black solid;"/>
                 <a href="https://github.com/gkamer8/EnemyInbound"><img src="pics/GitHub_Logo.png"/></a>
                 <br/>
-                <a href="#header">Back to top</a>
+                <a style="color:black;" href="#header">Back to top</a>
             </div>
             <div class=break></div>
             <div class=project id=steganography>
@@ -60,7 +105,7 @@
                 <img class=project-img src="pics/steg.png"/>
                 <a href="https://github.com/gkamer8/steganography"><img src="pics/GitHub_Logo.png"/></a>
                 <br/> <br/>
-                <a href="#header">Back to top</a>
+                <a style="color:black" href="#header">Back to top</a>
             </div>
         </div>
         <div style="height: 200px"></div> 

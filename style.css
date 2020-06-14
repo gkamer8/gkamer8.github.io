@@ -3,13 +3,14 @@ html{
 }
 body{
     text-align: center;
-    /*font-family: "Lucida Console", Monaco, monospace;*/
-    font-family: Georgia;
+    font-family: "Lucida Console", Monaco, monospace;
+    /*font-family: Georgia;*/
+    /*font-family: 'Times New Roman', Times, serif;*/
     margin: 0px;
     /*background-color: #222222;*/
 }
 a {
-    color: black;
+    color: white;
 }
 #container{
     display: inline-block;
@@ -35,24 +36,59 @@ a {
 }
 #top-bar a img{
     height: 20px;
+    float: right;
 }
 #header{
+    text-align: center;
+}
+#header-topping{
     padding: 20px;
+    text-align: center;
+    display:none;
 }
 #header-intro{
+    text-align: left;
+    color: greenyellow;
+    background-color: #222222;
     display: inline-block;
     margin: 0px;
-    padding: 10px;
-    width: calc(60% - 30px);
-    vertical-align: top;
+
+    width: calc(100% - 20px - 40px - 200px);
+
+    border-width: 20px;
+    border-color: #e0e0e0;
+    border-style:solid;
+    border-radius: 20px;
+
+    border-right-width: 200px;
+    border-bottom-width: 50px;
+
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+    
+    padding: 20px;
+
+    /*box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.5);*/
+
+    margin-top: 20px;
+
 }
-#header img{
-    width: 40%;
-    border-radius: 4px;
+#header-intro-text-container{
+    height: 15em;
+    display: block;
+}
+#header-intro img{
+    float: right;
+    width: 150px;
+    position: relative;
+    left: 190px;
+    top: 20px;
 }
 #nav{
     padding: 10px;
-    background-color:#f0f0f0;
+    background-color: black;
+    text-align: center;
+    color: white;
 }
 .nav-choice{
     display: inline-block;
@@ -99,8 +135,8 @@ a {
     display: none;
 }
 .break {
-    background-color: #222222;
-    height: 20px;
+    background-color: #A51C30;
+    height: 3px;
 }
 @media only screen and (max-width: 600px) {
     #container {
@@ -123,18 +159,32 @@ a {
         height: 30px;
         margin: 7px;
     }
+    #top-bar img {
+        height: 30px;
+        margin: 7px;
+    }
     #header {
         text-align: center;
         padding: 15px;
-    }
-    #header img {
-        display: none;
     }
     #header-intro{
         text-align: left;
         padding-top: 0px;
         padding-left: 0px;
-        width: calc(100% - 20px)
+        width: calc(100% - 60px);
+
+        border-width: 20px;
+        border-color: #e0e0e0;
+        border-style:solid;
+        border-radius: 20px;
+
+        padding: 10px;
+    }
+    #header-intro img {
+        display: none;
+    }
+    #header-intro-text-container{
+        height: 17em;
     }
     .break {
         background-color: #A51C30;
