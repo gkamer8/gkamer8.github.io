@@ -56,9 +56,6 @@
                 color: white;
                 border-color: #A51C30;
             }
-            #mobile-prof{
-                display: none;
-            }
             @media only screen and (max-width: 600px) {
                 #container {
                     width: 100%;
@@ -67,15 +64,8 @@
                 #header {
                     text-align: center;
                 }
-                #desktop-prof{
+                #header img {
                     display: none;
-                }
-                #mobile-prof{
-                    display: block;
-                    margin: auto;
-                    margin-bottom: 20px;
-                    margin-top: 10px;
-                    border-radius: 10px;
                 }
                 #header-intro{
                     text-align: left;
@@ -88,7 +78,7 @@
     <body>
         <div id=container>
             <div id=header>
-                <img id=desktop-prof src="profile.jpg"/>
+                <img src="profile.jpg"/>
                 <div id=header-intro>
                     Hello, <br/> <br/>
                     My name is Gordon Kamer, and I'm in Harvard College's class of 2022.
@@ -97,7 +87,6 @@
                     Best, <br/>
                     Gordon
                 </div>
-                <img id=mobile-prof src="profile.jpg"/>
             </div>
             <div id=nav>
                 <div class=nav-choice>Enemy Inbound | Java</div>
