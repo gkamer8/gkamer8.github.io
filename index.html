@@ -36,6 +36,7 @@
             }
             #header img{
                 width: 40%;
+                border-radius: 4px;
             }
             #nav{
                 padding: 10px;
@@ -55,6 +56,32 @@
                 background-color: #A51C30; /* Harvard Crimson */ 
                 color: white;
                 border-color: #A51C30;
+            }
+            .project {
+                padding: 20px;
+            }
+            .project-img {
+                width: calc(100% - 50px);
+                margin: 25px;
+                margin-bottom: 5px;
+            }
+            .project-text {
+                vertical-align: top;
+            }
+            .project h1 {
+                margin: 5px;
+                margin-left: 0px;
+                font-size: 20px;
+            }
+            .project-description {
+                font-size: 16px;
+                line-height: 1.7em;
+            }
+            .project a img{
+                width: 50px;
+                margin-top: 15px;
+                margin-bottom: 15px;
+                float: right;
             }
             @media only screen and (max-width: 600px) {
                 #container {
@@ -93,6 +120,18 @@
                 <div class=nav-choice>Steganography | C</div>
                 <div class=nav-choice>FEC 2020 | Python</div>
                 <div class=nav-choice>JAMA Analysis | R</div>
+            </div>
+            <div class=project>
+                <div class=project-text>
+                    <h1 class=project-title>Enemy Inbound</h1> <br/>
+                    <div class=project-description>
+                        Enemy Inbound is a game in Java that I made for the Ludum Dare game jam in 2013.
+                        Over the years, I lost the original source code, but I still had the .jar file. I ran it through a decompiler and put the result on github.
+                        It's a dual stick shooter with a minimalist art style (to be honest, the only art style I could do in 2013). You face an increasing number of enemies and can upgrade weapons and buy health.
+                    </div>
+                </div>
+                <img class=project-img src="pics/enemyinbound.png" style="border: 1px black solid;"/>
+                <a href="https://github.com/gkamer8/EnemyInbound"><img src="pics/GitHub_Logo.png"/></span></a>
             </div>
         </div>
     </body>
