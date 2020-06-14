@@ -125,6 +125,11 @@ a {
     font-size: 16px;
     line-height: 1.7em;
 }
+.project a {
+    font-size: 12px;
+    padding-bottom: 20px;
+    float: right;
+}
 .project a img{
     width: 50px;
     margin-top: 15px;
