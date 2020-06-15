@@ -7,7 +7,7 @@ body{
     /*font-family: Georgia;*/
     /*font-family: 'Times New Roman', Times, serif;*/
     margin: 0px;
-    background-color: #222222;
+    /*background-color: #222222;*/
 }
 a {
     color: white;
@@ -40,7 +40,6 @@ a {
 }
 #header{
     text-align: center;
-    background-color: #222222;
 }
 #header-topping{
     padding: 20px;
@@ -87,7 +86,7 @@ a {
 }
 #nav{
     padding: 10px;
-    background-color: #101010;
+    background-color: #222222;
     text-align: left;
     color: white;
 }
@@ -139,8 +138,8 @@ a {
     display: none;
 }
 .break {
-    background-color: #222222;
-    height: 25px;
+    background-color: #A51C30;
+    height: 3px;
 }
 @media only screen and (max-width: 600px) {
     #container {
