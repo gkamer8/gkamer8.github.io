@@ -48,7 +48,7 @@ a {
 }
 #header-intro{
     text-align: left;
-    color: greenyellow;
+    color: rgba(0, 255, 0, 1);
     background-color: #222222;
     display: inline-block;
     margin: 0px;
@@ -56,7 +56,7 @@ a {
     width: calc(100% - 20px - 40px - 200px);
 
     border-width: 20px;
-    border-color: #e0e0e0;
+    border-color: #dfded2;
     border-style:solid;
     border-radius: 20px;
 
