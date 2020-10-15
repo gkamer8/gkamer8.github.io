@@ -7,7 +7,7 @@ body{
     /*font-family: Georgia;*/
     /*font-family: 'Times New Roman', Times, serif;*/
     margin: 0px;
-    background-color: #222222;
+    background-color: #303030;
 }
 a {
     color: white;
@@ -17,7 +17,6 @@ a {
     text-align: left;
     width:70%;
     min-width: 600px;
-    background-color: white;
 
     /*border-left-color: #A51C30;
     border-left-width: 1px;
@@ -108,6 +107,7 @@ a {
 }
 .project {
     padding: 20px;
+    background-color: white;
 }
 .project-img {
     width: calc(100% - 50px);
