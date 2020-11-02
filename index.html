@@ -50,6 +50,8 @@
                         The value represents the sum of championship win probability for every year into the future, discounted using an interest rate given by the user.
                         The simulation predicts the Wins Above Replacement for every player on every team an arbitrary number of years into the future.
                         A team's players' combined WAR determines its championship probability, according to historical figures.
+                        It accounts for draft picks, MLB free agency, and amateur free agency.
+                        Using parallism, Cython, and Numpy optimizations, we reduced the time it takes to run a simulation by thirty times compared to our first implementation.
                     </div>
                 </div>
                 <img class=project-img src="pics/baseball.png" style="border: 1px black solid;"/>
