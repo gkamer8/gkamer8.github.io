@@ -25,6 +25,7 @@ a {
     border-right-color: #A51C30;
     border-right-width: 1px;
     border-right-style: solid;*/
+
 }
 #top-bar{
     display: none;
@@ -41,7 +42,7 @@ a {
     text-align: center;
 }
 #header-topping{
-    padding: 20px;
+    margin: 20px;
     text-align: center;
     display:none;
 }
