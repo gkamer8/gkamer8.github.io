@@ -17,7 +17,7 @@ a {
     text-align: left;
     width:70%;
     min-width: 600px;
-
+    max-width: 1000px;
     /*border-left-color: #A51C30;
     border-left-width: 1px;
     border-left-style: solid;
