@@ -48,7 +48,8 @@ a {
 }
 #header-intro{
     text-align: left;
-    color: rgba(0, 255, 0, 1);
+    /* color: rgba(0, 255, 0, 1); */
+    color: white;
     background-color: #222222;
     display: inline-block;
     margin: 0px;
