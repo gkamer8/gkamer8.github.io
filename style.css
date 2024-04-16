@@ -143,6 +143,14 @@ a {
     background-color: #A51C30;
     height: 3px;
 }
+.extLink {
+    all: unset;
+    font-size: 1rem !important;
+    text-decoration: underline;
+}
+.extLink:hover {
+    cursor: pointer;
+}
 @media only screen and (max-width: 600px) {
     #container {
         width: 100%;
