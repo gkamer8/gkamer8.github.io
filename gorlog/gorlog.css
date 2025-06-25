@@ -49,3 +49,12 @@ code {
     border: 1px solid #d0d0d0;
     border-radius: 5px;
 }
+.social-icon {
+    width: 20px;
+    height: 20px;
+}
+#author-block {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
