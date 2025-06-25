@@ -2,7 +2,7 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+        <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
         <link rel="stylesheet" href="/gorlog/gorlog.css">
         <script src="/gorlog/gorlog.js"></script>
         <meta property="og:article:author" content="Gordon Kamer" />
@@ -25,7 +25,203 @@
         <p>
             I thought it would be fun to make guests to my apartment agree to some embarassing terms in order to use the WiFi.
             The project turned out to be one of the more complicated things I've done with a computer.
+            I'd like to walk you through how I did it, and in so doing, discuss some of the finer points of networking on Linux.
         </p>
-        <img src="captive-portal-image.png" class="full-width" />
+        <img src="captive-portal-image.png" class="full-width" style="border:1px solid #d0d0d0;border-radius:7px" />
+        <p>
+            Basically, I'm turning my Linux machine into a WiFi access point with its own name (SSID).
+            You access it as you might connect to hotel WiFi - through a captive portal that makes you agree to terms before getting online.
+            It runs separately from my actual WiFi but depends on it for the real internet connection underlying everything.
+            We'll talk about systemd, which starts many of the important processes on your machine when your comptuer boots up; how Unix machines (Mac and Linux) see and interact with devices; how your computer is assigned an IP address; and other light topics.
+        </p>
+        
+        <h4>Software Overview</h4>
+        <p>
+            There is a bunch of software that may or may not be pre-installed on your machine that will be involved in this project.
+            There are alternatives, but judging from online fora, this is the most common stack for a project of this type:
+        </p>
+        <ul>
+            <li><b>hostapd</b>, for broadcasting your WiFi access point</li>
+            <li><b>dnsmasq</b>, for handling DNS and DHCP (more on this later)</li>
+            <li><b>nftables</b> (installed with the Linux kernel), for managing your firewall</li>
+            <li><b>NetworkManager</b>, for managing your regular internet connection (systemd-networkd is a more barebones alternative for servers)</li>
+            <li>Your captive portal server, which you can make using your favorite web development tools</li>
+        </ul>
+        <p>
+            For the captive portal itself, I will use Flask, which will run using gunicorn.
+            If your Linux distribution is using systemd, which it probably is, you can check the status of each of these services using <code>systemctl status service-name</code>, replacing <code>service-name</code> with each of the above services (captilization matters).
+            My captive portal also happens to be running as a systemd service, which I will show you how to set up.
+        </p>
+
+        <h4>Hardware and System Prerequisites</h4>
+        <p>
+            A few weeks ago was the grand opening of the Santa Clara Microcenter.
+            I walked out with a MinisForum UM760 Slim, which is a MiniPC that costs $250-350.
+            An annoying feature is that they have Windows pre-installed, so I put an ISO file on a USB stick, wiped Windows, and installed Linux (Arch btw).
+            Unfortunately, the WiFi card was not compatible with Linux, so I had to open up the computer with a screwdriver and put in a new one.
+            If you have to do the same, you shouldn't be intimidated. It requires roughly the same technical skill as changing a lightbulb.
+        </p>
+        <p>
+            I bought an Intel AX210 for the WiFi card, which has a critical feature for this project: it can function in "Access Point" (AP) mode.
+            Less critically but conveniently, it can function in AP mode at the same time it can use WiFi normally.
+        </p>
+        <p>
+            To confirm that you have a suitable WiFi card, you can use the iw tool, which is included in the Linux kernel (the w in iw stands for "wireless").
+            The command <code>iw list</code> will show information about your WiFi devices (cards). Your device might be named something like phy0, and iw will give a bunch of information about phy0 you don't care about - except for one thing, which is its "valid interface combinations."
+            One of the lines for my device looks like this:
+            <pre>#{ managed } <= 1, #{ AP, P2P-client, P2P-GO } <= 1, #{ P2P-device } <= 1,total <= 3, #channels <= 1</pre>
+            This tells me that I can have, simultaneously, <= 1 managed connections (normal connections), <= 1 access points OR P2P-clients (bluetooth) OR P2P-GOs (another bluetooth thing), and <= 1 P2P-devices (yet another bluetooth thing).
+            It also tells me that I can only use one "channel" in all, which will be a complication discussed later.
+            In any case, because I see that I can have a managed connection as well as an access point, I know what I'm trying to do is possible.
+            If you don't see "AP" anywhere, you're in trouble.
+        </p>
+        <p>
+            Even if you do see "AP", it's possible your WiFi card doesn't support AP mode simultaneously with a managed connection. In that case, you can simply use your ethernet port instead of WiFi while your access point is running.
+            That makes the process much simpler, actually, and you should ignore certain parts of this article. Going forward, however, I'm going to discuss only the case for my setup.
+        </p>
+
+        <h4>
+            Primer on Systemd and Systemctl
+        </h4>
+        <p>
+            Systemd is a program that is used by many Linux distributions to automatically start your machine's basic services, like your desktop's graphical interface, an SSH server, or networking utilities.
+            The "d" in systemd stands for "daemon," which is defined as a program you didn't launch in a shell. Daemons run in the background while you go off and do more important things.
+            Systemd is run as the very first program on many Linux distributions and bootstraps all your other daemons, whether user-defined or built-in. An alternative to systemd is initd.
+            Any program you want to run automatically when your machine first starts can be run using systemd.
+        </p>
+        <p>
+            You can interact with systemd using systemctl (developers' putting ctl or cli at the end of their daemons' names for their command line interfaces is a common pattern).
+            An informative command is <code>systemctl status</code>. For example, a service we will be using later is called dnsmasq.
+            We can check its status with <code>systemctl status dnsmasq</code>. If it's active, that means it's running right now. If it's enabled, we know that it will try to run when the computer starts up.
+            Other relevant commands are <code>systemctl enable service-name</code>, <code>systemctl disable service-name</code>, and <code>systemctl restart service-name</code>, replacing service-name with the service you're interested in.
+        </p>
+
+        <h4>
+            Network Interfaces and How to Make One
+        </h4>
+        <p>
+            A networking device connected to your computer is made accessible to programs through a network "interface."
+            Typically, you'll have one interface for your WiFi, one for each ethernet port, and one for "loopback."
+            IP addresses are unique for each interface (thus, your computer can have multiple IP addresses).
+            Typical names for these interfaces, which are likely already created on your machine, are "eth0" for your first ethernet port, "wlan0" for your WiFi (wireless LAN), and "lo" for loopback (the special interface for your 127.0.0.1 IP).
+            In other contexts, you may recall that running a server at "0.0.0.0:80" is different from running it at "127.0.0.1:80" because "0.0.0.0" references all interfaces.
+            You can check your network interfaces using <code>ip link show</code> (ip is a utility included in linux for managing networking - unlike iw, it's for non-wireless networks too).
+            For example, here is what I got when running <code>ip link show</code> before starting this project:
+            <pre>
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+2: enp2s0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc fq_codel state DOWN mode DEFAULT group default qlen 1000
+    link/ether 58:47:ca:7e:42:06 brd ff:ff:ff:ff:ff:ff
+    altname enx5847ca7e4206
+3: wlp3s0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DORMANT group default qlen 1000
+    link/ether c8:58:b3:e3:f9:22 brd ff:ff:ff:ff:ff:ff
+    altname wlxc858b3e3f922</pre>
+            Note that my interface names are slightly different from the most common ones: wlp3s0 is for WiFi and enp2s0 is for ethernet in my case.
+            You should make sure you know whether your managed WiFi interface is wlp3s0 or wlan0 and replace wlp3s0 with wlan0 as appropriate throughout this project.
+        </p>
+        <p>
+            The relationship between networking devices and interfaces is not strictly one-to-one.
+            Each interface is actually associated with a single IP, not a single device.
+            The first thing we have to do for this project is create a second interface for our WiFi card that acts as our access point, which will have a new IP.
+        </p>
+        <p>
+            We have to create this interface every time our computer starts up. Thus, we will create a systemd service.
+            You put user-defined systemd services in /etc/systemd/system. I created /etc/systemd/system/create-virtual-interface.service with the following content:
+            <pre>
+[Unit]
+Description=Create virtual wireless interface
+Requires=sys-subsystem-net-devices-wlp3s0.device
+After=network.target
+After=sys-subsystem-net-devices-wlp3s0.device
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/iw dev wlp3s0 interface add ap0 type __ap addr 02:00:00:00:01:00
+ExecStartPost=/usr/bin/ip addr add 192.168.12.1/24 dev ap0
+ExecStartPost=/usr/bin/ip link set ap0 up
+RemainAfterExit=yes
+[Install]
+WantedBy=multi-user.target</pre>
+
+        Note the "ExecStart" and "ExecStartPost" lines. Those are the commands we ask systemd to run. The first uses iw to create an interface based on the same device wlp3s0 is using with the name ap0.
+        We set the type of the interface to be "__ap", which means that it's being used as an access point. The "addr" is actually the MAC address, which here is fake but valid.
+        It's important to give the interface a MAC address lest it use the same one that wlp3s0 uses, which can lead to the two interfaces' stepping on each other's toes.
+        </p>
+        <p>
+            The next two commands use ip. First, we assign a local IP address 192.168.12.1 to our interface.
+            The /24 is a "subnet mask", which specifies that it can reach 192.168.0.0 through 192.168.255.255 on its local network, the IPs that will be associated with devices our new network.
+            <a href="https://datatracker.ietf.org/doc/html/rfc1918">RFC 1918</a> defines the standard which says that 192.168.0.0 to 192.168.255.255 are all local IPs.
+            It also permits 10.0.0.0/8 and 172.16.0.0/12. If your regular WiFi uses 192.168 prefixed IPs, choose one of the alternate ranges.
+            You can check your existing IP address using <code>ip addr show</code>, and look for the "inet" entry.
+            The next command brings the interface up.
+        </p>
+        
+        <h4>Running an Access Point</h4>
+        <p>
+            We will now try to make our WiFi accessible without a captive portal at first.
+            If you have an iPhone, you use built-in software that does the same thing when you make your phone a hotspot.
+        </p>
+        <p>
+            The first tool we'll use is hostapd. This tool will give our WiFi a name and optional password.
+            Once you've checked that it's installed and enabled, we can modify its configuration file available at /etc/hostapd/hostapd.conf.
+            Most configuration files end in .conf, and most of them live in /etc ("edit to configure"). Here is what my configuration looks like:
+        </p>
+        <pre>
+interface=ap0
+ssid=GrondonNet
+hw_mode=g
+channel=6
+ieee80211n=1
+wmm_enabled=1
+
+#auth_algs=1
+#wpa=2
+#wpa_key_mgmt=WPA-PSK
+#rsn_pairwise=CCMP
+#wpa_passphrase=MyOptionalPassword</pre>
+        <p>
+            I have commented out the section that would give this network a password.
+            The network I'm hosting is at ap0, which is what we called the network interface we created.
+            The SSID is the name people will see when they select our WiFi network.
+            The hw_mode=g and channel=6 parts specify that we're using 2.4GHz.
+        </p>
+        <p>
+            Most home routers can host WiFi at 2.4GHz and 5GHz. You sometimes will see separate networks available for each, though usually you may see only one, which is assumed to be at 5GHz.
+            5GHz is faster and generally recommended.
+            However, in this case, I happen to know that the Intel AX210 (as well as all Intel cards) have a bug that prevents them from running AP mode at 5GHz.
+            I also know from before that my card can support AP and managed at the same time only on a single channel.
+            Thus, I must use 2.4GHz for both my AP and normal WiFi connection, which I will have to ensure is at 2.4GHz.
+            Note also that I need to match the channel (6) to the same channel my regular WiFi is using. Since 1, 6, and 11 are all valid for 2GHz, we'll have to check.
+            Annoyingly, the exact channel can also change over time, which means that you may have to reconfigure this value repeatedly (please tell me if you have a solution here).
+        </p>
+        <p>
+            My normal WiFi is being managed with NetworkManager. NetworkManager is used for desktops while systemd-networkd is the alternative for servers.
+            You can check which if any is running using systemctl.
+            If you need to disable systemd-networkd to prevent it from colliding with NetworkManager (which I had to do), you'll need to <code>systemctl disable systemd-networkd</code>.
+            If you are told you need to disable more services to properly disable systemd-networkd, ask for the right command from ChatGPT.
+        </p>
+        <p>
+            Now I can properly make sure that NetworkManager is connecting to my WiFi at 2.4GHz.
+            NetworkManager saves connections in /etc/NetworkManager/system-connections. You should find a file with the same name as your WiFi.
+            You should modify the [wifi] section so that its band is "bg", which corresponds to 2.4GHz.
+        </p>
+        <pre>[wifi]
+band=bg
+mode=infrastructure
+ssid=Dwarfism 2.0</pre>
+        <p>
+            In order to access the system-connections directory, you may need root access. You can use <code>sudo -s</code> to start using your shell as root and then cd inside. Running <code>sudo cd</code> doesn't work.
+        </p>
+        <p>
+            Next, we can confirm that the correct 2.4GHz channel is actually 6. We will use the NetworkManager command line interface, nmcli.
+            Run <code>nmcli device wifi list</code> to display all of the available WiFi connections within earshot.
+            It will show the channel for each. 157 is the channel for 5GHz. Look for one whose channel is 1, 6, or 11 and note that value. Go back to your hostapd.conf if needed and update the channel.
+        </p>
+        <p>
+            Lastly, we want NetworkManager to stay out of the way of our access point (it should only be managing the interface wlp3s0).
+            We can add a file to /etc/NetworkManager/conf.d called unmanaged.conf with the following content:
+            <pre>[keyfile]
+unmanaged-devices=interface-name:ap0</pre>
+            Later on, if you run <code>nmcli</code> (no arguments), you should see that "ap0" is "unmanaged" while your wlp3s0 (or wlan0) is "connected."
+        </p>
     </body>
 </html>

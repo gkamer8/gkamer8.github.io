@@ -32,3 +32,20 @@ h1, h2, h3, h4, h5, h6 {
     margin-bottom: 0px;
     padding-bottom: 0px;
 }
+pre {
+    font-size: .8em;
+    width: 100%;
+    overflow: scroll;
+    white-space: pre-wrap;
+    background: #f0f0f0;
+    padding: 10px;
+    border: 1px solid #d0d0d0;
+    border-radius: 5px;
+}
+code {
+    background-color: #f0f0f0;
+    font-size: .8em;
+    padding: .1em .2em;
+    border: 1px solid #d0d0d0;
+    border-radius: 5px;
+}
